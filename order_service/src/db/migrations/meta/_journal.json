@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1734369131467,
+      "tag": "0000_right_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734508208070,
+      "tag": "0001_panoramic_the_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734518781823,
+      "tag": "0002_dusty_starhawk",
+      "breakpoints": true
+    }
+  ]
+}

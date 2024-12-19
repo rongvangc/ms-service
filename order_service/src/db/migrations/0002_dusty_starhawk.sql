@@ -1,0 +1,1 @@
+ALTER TABLE "cart_line_items" ADD COLUMN "updated_at" timestamp DEFAULT now() NOT NULL;
