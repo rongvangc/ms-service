@@ -1,12 +1,12 @@
 import * as Repository from "../repository/cart.repository";
-import { CartRepositoryType } from "../types/repository.type";
+import { CartRepositoryType } from "../repository/cart.repository";
 import { CreateCart } from "./cart.service";
 
 describe("Cart Service", () => {
   let repo: CartRepositoryType;
 
   beforeEach(() => {
-    repo = Repository.CartRepository;
+    repo = Repository.cartRepositoryType;
   });
 
   afterEach(() => {
@@ -19,12 +19,14 @@ describe("Cart Service", () => {
       amount: 1200,
     };
 
-    jest.spyOn(Repository.CartRepository, "create").mockImplementationOnce(() =>
-      Promise.resolve({
-        message: "fake response from cart repository",
-        input: mockCart,
-      })
-    );
+    jest
+      .spyOn(Repository.cartRepositoryType, "createCart")
+      .mockImplementationOnce(() =>
+        Promise.resolve({
+          message: "fake response from cart repository",
+          input: mockCart,
+        })
+      );
 
     const res = await CreateCart(mockCart, repo);
 

@@ -49,6 +49,7 @@ const connectProducer = async <T>(): Promise<T> => {
   });
 
   await producer.connect();
+
   console.log("producer connected with new connection");
   return producer as unknown as T;
 };
