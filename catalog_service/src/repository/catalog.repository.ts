@@ -45,4 +45,16 @@ export class CatalogRepository implements ICatalogRepository {
 
     throw new NotFoundError("product not found");
   }
+
+  async findStock(ids: number[]): Promise<Product[]> {
+    const products = await this._prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return products;
+  }
 }

@@ -65,7 +65,7 @@ catalogRouter.get(
 );
 
 catalogRouter.get(
-  "/product/:id",
+  "/products/:id",
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const id = parseInt(req.params.id) || 0;
 
@@ -79,12 +79,25 @@ catalogRouter.get(
 );
 
 catalogRouter.delete(
-  "/product/:id",
+  "/products/:id",
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const id = parseInt(req.params.id) || 0;
 
     try {
       const data = await catalogService.deleteProduct(id);
+      return res.status(200).json(data);
+    } catch (error) {
+      const err = error as Error;
+      return res.status(500).json(err.message);
+    }
+  }
+);
+
+catalogRouter.post(
+  "/products/stock",
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const data = await catalogService.getProductStock(req.body.ids);
       return res.status(200).json(data);
     } catch (error) {
       const err = error as Error;

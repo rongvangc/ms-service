@@ -20,6 +20,7 @@ const ExpressApp = async () => {
 
   const consumer = await MessageBroke.connectConsumer<Consumer>();
   consumer.on("consumer.connect", () => {
+    // write all business logic
     console.log("consumer connected");
   });
 

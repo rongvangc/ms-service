@@ -22,6 +22,13 @@
       "when": 1734518781823,
       "tag": "0002_dusty_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1735041825367,
+      "tag": "0003_wandering_legion",
+      "breakpoints": true
     }
   ]
 }

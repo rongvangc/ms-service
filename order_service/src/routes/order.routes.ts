@@ -1,48 +1,67 @@
 import express, { NextFunction, Request, Response } from "express";
 import { MessageBroke } from "../utils/broker";
 import { OrderEvents } from "../types";
+import { RequestAuthorizer } from "../middleware/authMiddleware";
+import * as service from "../service/order.service";
+import { orderRepository } from "../repository/order.repository";
+import { cartRepositoryType } from "../repository/cart.repository";
+import { OrderStatus } from "../types/order.types";
 
 const orderRouter = express.Router();
+const repo = orderRepository;
+const cartRepo = cartRepositoryType;
 
 orderRouter.post(
-  "/order",
+  "/orders",
+  RequestAuthorizer,
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    // order create logic
-
-    // 3rd step: publish the message
-    await MessageBroke.publish({
-      topic: "OrderEvents",
-      headers: { token: req.headers.authorization },
-      event: OrderEvents.CREATE_ORDER,
-      message: {
-        orderId: 1,
-        items: [
-          {
-            productId: 1,
-            quantity: 1,
-          },
-          {
-            productId: 2,
-            quantity: 2,
-          },
-        ],
-      },
-    });
-    return res.status(201).json("123");
+    const user = req.user;
+    if (!user) {
+      next(new Error("user not found"));
+      return;
+    }
+    const response = await service.CreateOrder(user.id, repo, cartRepo);
+    return res.status(201).json(response);
   }
 );
 
 orderRouter.get(
-  "/order",
+  "/orders:id",
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    return res.status(201).json("123");
+    const user = req.user;
+    if (!user) {
+      next(new Error("user not found"));
+      return;
+    }
+    const response = await service.GetOrders(user.id, repo);
+    return res.status(200).json(response);
+  }
+);
+
+// only going to call from microservice
+orderRouter.patch(
+  "/orderS/:id",
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    // security check for microservice calls only
+    const id = parseInt(req.body.id);
+    const status = req.body.status as OrderStatus;
+    const response = await service.UpdateOrder(id, status, repo);
+    return res.status(200).json(response);
   }
 );
 
 orderRouter.delete(
-  "/order/:id",
+  "/orders/:id",
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    return res.status(201).json("123");
+    const user = req.user;
+    if (!user) {
+      next(new Error("user not found"));
+      return;
+    }
+    const orderId = parseInt(req.params.id);
+    const status = req.body.status;
+    const response = await service.DeleteOrder(orderId, status);
+    return res.status(200).json(response);
   }
 );
 
